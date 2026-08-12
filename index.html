@@ -18168,11 +18168,11 @@ var D=[
 ["4719893304567","海外中成药","","需补件","暂无","",""],
 ["4404875","海外西药","","已备案","PROSTESS ® UNO SOFT CAPSULES 320MG (100'S/BOX)","",""]
 ];
-var AU="fd1f87c0c87894d446e677aa988f851de045f732c067ec424ebad50061123b8c",AP="c72eb7aba2096438ea0939a18321982757faa646570dbd809b7d4eb5563223b5";
+var AU="a9a6d5d6dd6e0c62b5256135c9b56e9cd6ee286132fa85af15f2d637550c7abe",AP="7cb767c0906d9f823f0391c068b88c94bd4ac6507bdca0a65f8bc1ce60d0856d";
 function s256(s){return crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return("0"+x.toString(16)).slice(-2)}).join("")})}
 function showApp(){document.getElementById("loginOverlay").style.display="none";document.getElementById("appWrap").style.display=""}
-function tryLogin(){var el=document.getElementById("lerr");if(!window.crypto||!crypto.subtle){el.textContent="\u5f53\u524d\u6d4f\u89c8\u5668\u4e0d\u652f\u6301\u767b\u5f55\u9a8c\u8bc1";el.style.display="";return}var u=document.getElementById("lu").value.trim();var p=document.getElementById("lp").value;if(!u||!p){el.textContent="\u8bf7\u8f93\u5165\u8d26\u53f7\u548c\u5bc6\u7801";el.style.display="";return}
-Promise.all([s256(u),s256(p)]).then(function(h){if(h[0]===AU&&h[1]===AP){try{sessionStorage.setItem("fpxauth","1")}catch(e){}showApp()}else{el.textContent="\u8d26\u53f7\u6216\u5bc6\u7801\u9519\u8bef\uff0c\u8bf7\u91cd\u8bd5";el.style.display="";document.getElementById("lp").value=""}})}
+function tryLogin(){var el=document.getElementById("lerr");if(!window.crypto||!crypto.subtle){el.textContent="\u5f53\u524d\u6d4f\u89c8\u5668\u4e0d\u652f\u6301\u767b\u5f55\u9a8c\u8bc1";el.style.display="block";return}var u=document.getElementById("lu").value.trim();var p=document.getElementById("lp").value;if(!u||!p){el.textContent="\u8bf7\u8f93\u5165\u8d26\u53f7\u548c\u5bc6\u7801";el.style.display="block";return}
+Promise.all([s256(u),s256(p)]).then(function(h){if(h[0]===AU&&h[1]===AP){try{sessionStorage.setItem("fpxauth","1")}catch(e){}showApp()}else{el.textContent="\u8d26\u53f7\u6216\u5bc6\u7801\u9519\u8bef\uff0c\u8bf7\u91cd\u8bd5";el.style.display="block";document.getElementById("lp").value=""}})}
 (function(){var ok=false;try{ok=sessionStorage.getItem("fpxauth")==="1"}catch(e){}if(ok)showApp();
 document.getElementById("lu").addEventListener("keydown",function(e){if(e.key==="Enter")tryLogin()});
 document.getElementById("lp").addEventListener("keydown",function(e){if(e.key==="Enter")tryLogin()})})();
