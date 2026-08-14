@@ -47,6 +47,26 @@ textarea#bcIn:focus{border-color:#1a73e8;box-shadow:0 0 0 2px rgba(26,115,232,.1
 .btn-export:hover{background:#1b5e20}
 .btn-clear{height:36px;padding:0 18px;background:#fff;color:#666;border:1px solid #d0d0d0;border-radius:6px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px}
 .btn-clear:hover{background:#f5f5f5}
+.btn-msg{height:36px;padding:0 18px;background:#ff8f00;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px}
+.btn-msg:hover{background:#ef6c00}
+#msgOverlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(13,71,161,.45);display:none;align-items:center;justify-content:center;z-index:9998}
+.msg-card{background:#fff;border-radius:14px;padding:28px 32px;width:540px;max-width:94vw;max-height:88vh;overflow:auto;box-shadow:0 12px 48px rgba(0,0,0,.25)}
+.msg-card h3{font-size:17px;font-weight:600;color:#222;margin-bottom:6px}
+.msg-sub{font-size:12px;color:#888;margin-bottom:18px;line-height:1.7}
+.msg-fg{margin-bottom:14px}
+.msg-fg label{display:block;font-size:13px;font-weight:500;color:#555;margin-bottom:6px}
+.msg-fg .req{color:#d32f2f;margin-right:2px}
+.msg-fg input,.msg-fg textarea{width:100%;border:1px solid #d0d0d0;border-radius:8px;padding:9px 14px;font-size:14px;outline:none}
+.msg-fg textarea{height:110px;resize:vertical;line-height:1.6;font-family:inherit}
+.msg-fg input:focus,.msg-fg textarea:focus{border-color:#1a73e8;box-shadow:0 0 0 2px rgba(26,115,232,.15)}
+.msg-status{font-size:13px;min-height:20px;margin:2px 0 10px;display:none;line-height:1.6}
+.msg-btns{display:flex;gap:10px;justify-content:flex-end}
+.msg-send{height:40px;padding:0 22px;background:#1a73e8;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer}
+.msg-send:hover{background:#1557b0}
+.msg-send:disabled{background:#9db8dd;cursor:not-allowed}
+.msg-cancel{height:40px;padding:0 18px;background:#fff;color:#666;border:1px solid #d0d0d0;border-radius:8px;font-size:14px;cursor:pointer}
+.msg-cancel:hover{background:#f5f5f5}
+@media(max-width:600px){.msg-card{padding:20px}}
 .tbl-wrap{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08)}
 table{width:100%;border-collapse:collapse}
 thead th{background:#f8f9fa;color:#444;font-weight:600;font-size:13px;padding:12px 14px;text-align:left;border-bottom:2px solid #e0e0e0;white-space:nowrap}
@@ -131,7 +151,7 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
 <div class="barcode-wrap"><label>商品条码搜索</label><div class="input-row"><textarea id="bcIn" placeholder="输入条码搜索，支持每行一个 / 逗号分隔 / 空格分隔"></textarea><button class="btn-search" onclick="doSearch()">搜 索</button></div><div class="hint">提示：支持批量查询多条条码，每行一个 / 逗号分隔 / 空格分隔，可直接从 Excel 复制一列粘贴<span class="bc-counter empty" id="bcCnt">已输入 0 条条码</span></div></div>
 </div></div>
 <div class="result-area">
-<div class="toolbar"><div class="stats" id="si">共 <strong>0</strong> 条记录</div><div class="btn-group"><button class="btn-export" onclick="doExport()" id="btnExp"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>导出Excel</button><button class="btn-clear" onclick="doClear()" id="btnClr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>清除数据</button></div></div>
+<div class="toolbar"><div class="stats" id="si">共 <strong>0</strong> 条记录</div><div class="btn-group"><button class="btn-msg" onclick="openMsg()" id="btnMsg"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16a1 1 0 011 1v11a1 1 0 01-1 1H8l-5 4V5a1 1 0 011-1z"/></svg>我要留言</button><button class="btn-export" onclick="doExport()" id="btnExp"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>导出Excel</button><button class="btn-clear" onclick="doClear()" id="btnClr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>清除数据</button></div></div>
 <div class="tbl-wrap"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
 <div class="empty" id="es"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><div>请输入条码或选择分类后点击搜索</div></div>
 <div class="pg" id="pg"></div>
@@ -146,6 +166,17 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
 </div>
 <div class="lg-email">补件材料接收邮箱：4pxotc@4px.com（邮件主题：4px药牌+海外OTC+香港菜鸟4pxOTC仓+XX店铺+X月X日备案申请，其中必须包含关键词"备案申请"）</div>
 </div>
+<div id="msgOverlay" onclick="if(event.target===this)closeMsg()">
+<div class="msg-card">
+<h3>留言咨询</h3>
+<p class="msg-sub">备案进度咨询、审核超期催办、补件疑问等均可在此留言，4PX 工作人员将尽快跟进解答。如需提交备案材料，请发邮件至 4pxotc@4px.com。</p>
+<div class="msg-fg"><label><span class="req">*</span>店铺名称</label><input id="mShop" type="text" maxlength="60" placeholder="请填写您的店铺名称，便于我们定位跟进"></div>
+<div class="msg-fg"><label>商品条码（选填）</label><input id="mBc" type="text" maxlength="60" placeholder="如针对具体商品留言，请填写条码"></div>
+<div class="msg-fg"><label>联系方式（选填）</label><input id="mCc" type="text" maxlength="60" placeholder="钉钉 / 电话 / 邮箱，便于回复您"></div>
+<div class="msg-fg"><label><span class="req">*</span>留言内容</label><textarea id="mTxt" maxlength="1000" placeholder="例：条码 XXXXXXXX 提交已超过14个工作日，请协助查询审核进展"></textarea></div>
+<div class="msg-status" id="mSt"></div>
+<div class="msg-btns"><button class="msg-cancel" onclick="closeMsg()">取消</button><button class="msg-send" id="mSend" onclick="sendMsg()">提交留言</button></div>
+</div></div>
 <div class="ftr">本系统数据仅限内部查询使用，请勿外传</div>
 </div>
 <script>
@@ -15959,28 +15990,20 @@ var D=[
 ["4513819102309","-","","需补件","暂无","",""],
 ["4513819102408","-","","需补件","暂无","",""],
 ["4513819110205","-","","需补件","暂无","",""],
-["4513819111004","-","","需补件","暂无","",""],
-["4513819110601","-","","需补件","暂无","",""],
 ["4513819110304","-","","需补件","暂无","",""],
 ["4513819111301","-","","需补件","暂无","",""],
-["4513819110403","-","","需补件","暂无","",""],
-["4513819671409","-","","需补件","暂无","",""],
 ["4513819110502","-","","需补件","暂无","",""],
-["4513819139305","-","","需补件","暂无","",""],
-["4513819070349","-","","需补件","暂无","",""],
 ["4513819070325","-","","需补件","暂无","",""],
 ["4513819633261","-","","需补件","暂无","",""],
-["4956124009886","-","","需补件","暂无","",""],
-["4987210501434","-","","需补件","暂无","",""],
 ["4992402102269","-","","需补件","暂无","",""],
 ["9588814601062","普品","","已备案","暂无","",""],
 ["9300673893680","海外西药","","已备案","PANADOL LIQUID CAPS 500MG (16'S)","",""],
-["50716005295","普品","","需补件","暂无","",""],
+["50716005295-1","普品","","需补件","暂无","",""],
 ["50716005202","普品","","需补件","暂无","",""],
 ["50716005233","普品","","需补件","暂无","",""],
 ["50716005349","普品","","需补件","暂无","",""],
 ["50716007145","普品","","需补件","暂无","",""],
-["50716005448","普品","","已备案","暂无","",""],
+["50716005448-1","普品","","已备案","暂无","",""],
 ["50716005431","普品","","已备案","暂无","",""],
 ["50716005769","普品","","需补件","暂无","",""],
 ["50716008746","普品","","需补件","暂无","",""],
@@ -17649,7 +17672,7 @@ var D=[
 ["4104610006189","-","","已备案","暂无","",""],
 ["9314057005453","海外西药","","已备案","DURO-TUSS CHESTY COUGH LIQUID FORTE ORAL LIQUID (200ML/BOTTLE)","",""],
 ["9351369000011","普品","","已备案","暂无","",""],
-["050716005431","普品","","已备案","暂无","",""],
+["050716005431-1","普品","","已备案","暂无","",""],
 ["3499320013024","普品","","已备案","暂无","",""],
 ["9351369000240","普品","","已备案","暂无","",""],
 ["4719879310092","海外中成药","","需补件","暂无","",""],
@@ -17758,12 +17781,12 @@ var D=[
 ["VOTC01141","海外西药","","已备案","TIGER BALM NECK & SHOULDER RUB CREAM 50G","",""],
 ["8806265000685","海外西药","","审核中","暂无","",""],
 ["8806265001811","海外西药","","审核中","暂无","",""],
-["8806265003433","海外西药","","审核中","暂无","",""],
-["8806265005918","海外西药","","审核中","暂无","",""],
+["8806265003433","海外西药","","卫生署拒絕","暂无","",""],
+["8806265005918","海外西药","","卫生署拒絕","暂无","",""],
 ["8806265013012","海外西药","","审核中","暂无","",""],
-["8806265020706","海外西药","","审核中","暂无","",""],
-["8806574008020","海外西药","","审核中","暂无","",""],
-["28806265005912","海外西药","","审核中","暂无","",""],
+["8806265020706","海外西药","","需补件","暂无","",""],
+["8806574008020","海外西药","","需补件","暂无","",""],
+["28806265005912","海外西药","","卫生署拒絕","暂无","",""],
 ["4895043616105","-","","卫生署拒絕","暂无","",""],
 ["766961410479","普品","","已备案","暂无","",""],
 ["4010036101282","普品","","已备案","暂无","",""],
@@ -17819,7 +17842,7 @@ var D=[
 ["4891781089065","香港注册中成药","","已备案","暂无","",""],
 ["4891781089041","香港注册中成药","","已备案","暂无","",""],
 ["4715688210080","海外中成药","","已备案","暂无","",""],
-["4897152800048","海外西药","","审核中","暂无","",""],
+["4897152800048","香港注册中成药","","已备案","暂无","",""],
 ["8806980028827","海外西药","","审核中","暂无","",""],
 ["8699832010015","海外中成药","","需补件","暂无","",""],
 ["4987138812640","海外中成药","","需补件","海外中成药","",""],
@@ -18072,7 +18095,7 @@ var D=[
 ["4897096602029","普品","","已备案","暂无","",""],
 ["4897096602012","普品","","已备案","暂无","",""],
 ["4897085365249","普品","","已备案","暂无","",""],
-["4895125155133","-","","需补件","暂无","",""],
+["4895125155133","普品","","已备案","暂无","",""],
 ["4895043619793","普品","","已备案","暂无","",""],
 ["132207522570","-","","需补件","暂无","",""],
 ["4270001473844","普品","","已备案","暂无","",""],
@@ -18159,7 +18182,18 @@ var D=[
 ["4987240210252","海外西药","","审核中","暂无","",""],
 ["4987240210368","海外西药","","审核中","暂无","",""],
 ["4987306028746-1","海外西药","","已备案","SEMPER RAMCURE TABLETS (8'S/BOX)","",""],
-["4892933199878","","","","","",""]
+["4719873865086","海外西药","","审核中","","",""],
+["4513819110601","普品","","已备案","暂无","",""],
+["4513819111004","普品","","已备案","暂无","",""],
+["4513819671409","普品","","已备案","暂无","",""],
+["4513819110403","普品","","已备案","暂无","",""],
+["4513819139305","普品","","已备案","暂无","",""],
+["4897139051326","","","","","",""],
+["4895178618500","","","","","",""],
+["4895125698456","","","","","",""],
+["9300607011883","","","","","",""],
+["9300607011302","","","","","",""],
+["PZN-20616708","","","","","",""]
 ];
 var AU="a9a6d5d6dd6e0c62b5256135c9b56e9cd6ee286132fa85af15f2d637550c7abe",AP="7cb767c0906d9f823f0391c068b88c94bd4ac6507bdca0a65f8bc1ce60d0856d";
 function s256(s){return crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return("0"+x.toString(16)).slice(-2)}).join("")})}
@@ -18223,4 +18257,9 @@ document.getElementById("bcIn").addEventListener("keydown",function(e){if(e.key=
 function updCnt(){var n=pB(document.getElementById("bcIn").value).length;var el=document.getElementById("bcCnt");el.textContent="\u5df2\u8f93\u5165 "+n+" \u6761\u6761\u7801";el.className=n>0?"bc-counter":"bc-counter empty"}
 document.getElementById("bcIn").addEventListener("input",updCnt);
 document.getElementById("bcIn").addEventListener("paste",function(){setTimeout(updCnt,50)});
+var GT="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";
+function openMsg(){document.getElementById("msgOverlay").style.display="flex";var st=document.getElementById("mSt");st.style.display="none";st.textContent=""}
+function closeMsg(){document.getElementById("msgOverlay").style.display="none"}
+function mFail(m){var st=document.getElementById("mSt");st.style.display="block";st.style.color="#d32f2f";st.textContent="\u63d0\u4ea4\u5931\u8d25\uff1a"+m+"\u3002\u8bf7\u7a0d\u540e\u91cd\u8bd5\uff0c\u6216\u76f4\u63a5\u53d1\u90ae\u4ef6\u81f3 4pxotc@4px.com";var b=document.getElementById("mSend");b.disabled=false;b.textContent="\u63d0\u4ea4\u7559\u8a00"}
+function sendMsg(){var st=document.getElementById("mSt");st.style.display="block";var shop=document.getElementById("mShop").value.trim();var bc=document.getElementById("mBc").value.trim();var cc=document.getElementById("mCc").value.trim();var txt=document.getElementById("mTxt").value.trim();if(!shop){st.style.color="#d32f2f";st.textContent="\u8bf7\u586b\u5199\u5e97\u94fa\u540d\u79f0";return}if(!txt){st.style.color="#d32f2f";st.textContent="\u8bf7\u586b\u5199\u7559\u8a00\u5185\u5bb9";return}if(txt.length>1000){st.style.color="#d32f2f";st.textContent="\u7559\u8a00\u5185\u5bb9\u8bf7\u63a7\u5236\u5728 1000 \u5b57\u4ee5\u5185";return}if(!GT){mFail("\u7559\u8a00\u901a\u9053\u672a\u914d\u7f6e");return}var nowS=Math.floor(Date.now()/1000),cd=0;try{cd=Number(sessionStorage.getItem("fpxMsgCd")||0)}catch(e){}if(nowS<cd){st.style.color="#d32f2f";st.textContent="\u8bf7\u52ff\u9891\u7e41\u63d0\u4ea4\uff0c\u8bf7 "+(cd-nowS)+" \u79d2\u540e\u518d\u8bd5";return}var btn=document.getElementById("mSend");btn.disabled=true;btn.textContent="\u63d0\u4ea4\u4e2d\u2026";st.style.color="#666";st.textContent="\u6b63\u5728\u63d0\u4ea4\u7559\u8a00\u2026";var d=new Date();function p2(n){return(n<10?"0":"")+n}var ts=d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate())+" "+p2(d.getHours())+":"+p2(d.getMinutes());var title="\u5546\u5bb6\u7559\u8a00\uff1a"+shop+"\uff08"+ts+"\uff09";var body="**\u5e97\u94fa\u540d\u79f0**\uff1a"+shop+"\n\n**\u5546\u54c1\u6761\u7801**\uff1a"+(bc||"\u672a\u586b\u5199")+"\n\n**\u8054\u7cfb\u65b9\u5f0f**\uff1a"+(cc||"\u672a\u586b\u5199")+"\n\n**\u7559\u8a00\u5185\u5bb9**\uff1a\n"+txt+"\n\n---\n\u63d0\u4ea4\u65f6\u95f4\uff1a"+ts+"\uff08\u5546\u5bb6\u6d4f\u89c8\u5668\u672c\u5730\u65f6\u95f4\uff09\n\u6765\u6e90\uff1a4PX\u836f\u54c1\u5907\u6848\u67e5\u8be2\u9875";fetch("https://api.github.com/repos/fourpx/4px-otc-query/issues",{method:"POST",headers:{"Authorization":"token "+GT,"Accept":"application/vnd.github+json","Content-Type":"application/json"},body:JSON.stringify({title:title,body:body,labels:["\u5546\u5bb6\u7559\u8a00"]})}).then(function(r){if(r.status===201||r.ok){st.style.color="#2e7d32";st.textContent="\u7559\u8a00\u5df2\u63d0\u4ea4\uff0c\u6211\u53f8\u5c06\u5c3d\u5feb\u8ddf\u8fdb\u89e3\u7b54\uff0c\u8c22\u8c22\uff01";try{sessionStorage.setItem("fpxMsgCd",String(nowS+30))}catch(e){}document.getElementById("mTxt").value="";setTimeout(function(){closeMsg();btn.disabled=false;btn.textContent="\u63d0\u4ea4\u7559\u8a00"},2600)}else{r.json().then(function(j){mFail((j&&j.message)||("HTTP "+r.status))},function(){mFail("HTTP "+r.status)})}}).catch(function(){mFail("\u7f51\u7edc\u9519\u8bef")})}
 </script></body></html>
