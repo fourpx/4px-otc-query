@@ -61,6 +61,12 @@ footer{margin-top:24px;text-align:center;font-size:12px;color:#aaa}
 • <b>需补件</b>：备案资料不全，需商家补充资料后继续审核<br>
 • <b>未备案</b>：尚未完成备案（含被驳回 / 拒绝的记录，备注中显示原因）</div>
 </div>
+<div class="note-card" id="mailCard">
+<h3>补件材料提交说明</h3>
+<div>查询结果为 <b>需补件</b> 或 <b>未备案</b> 的商品，请将补充资料发送至邮箱：<b>4pxotc@4px.com</b><br>
+邮件主题格式：<b>4px药牌+海外OTC+香港菜鸟4pxOTC仓+XX店铺+X月X日备案申请</b>（主题中必须包含关键词"备案申请"）<br>
+示例：4px药牌+海外OTC+香港菜鸟4pxOTC仓+vitahouse店铺+10月21日备案申请</div>
+</div>
 <div class="searchbar">
 <textarea id="q" rows="3" placeholder="输入商品条码 / 产品名称，支持一次粘贴多个条码（换行、逗号、空格分隔均可），回车或点击查询"></textarea>
 <button class="btn btn-primary" onclick="doSearch()">查 询</button>
@@ -70,7 +76,7 @@ footer{margin-top:24px;text-align:center;font-size:12px;color:#aaa}
 <div class="meta"><span id="stat"></span><span id="src"></span></div>
 <div id="result"></div>
 <div class="pagination" id="pager"></div>
-<footer>4PX药品备案查询 · 若查询无结果，请确认条码准确或联系 OTC 备案负责人</footer>
+<footer>4PX药品备案查询 · 需补件/未备案的商品请按上方说明发送邮件提交资料 · 若查询无结果，请确认条码准确或联系 OTC 备案负责人</footer>
 </div>
 <script>
 var D=[
@@ -19549,7 +19555,7 @@ function render(){
   if(!hits.length){el.innerHTML='<div class="empty">未找到匹配记录 · 该条码可能尚未提交备案申请</div>';pg.innerHTML='';return}
   var start=cur*PAGE,end=Math.min(start+PAGE,hits.length),h='<table><thead><tr><th>条码</th><th>产品名称</th><th>药物分类</th><th>备案状态</th></tr></thead><tbody>';
   for(var i=start;i<end;i++){var r=hits[i];
-    h+='<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td><td>'+esc(r[2])+'</td><td><span class="tag '+tagClass(r[3])+'">'+esc(r[3])+'</span>'+(r[3]==='未备案'&&r[4]?'<div class="remark-detail">备注：'+esc(r[4])+'</div>':'')+'</td></tr>';
+    h+='<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td><td>'+esc(r[2])+'</td><td><span class="tag '+tagClass(r[3])+'">'+esc(r[3])+'</span>'+(r[3]==='未备案'&&r[4]?'<div class="remark-detail">备注：'+esc(r[4])+'</div>':'')+((r[3]==='未备案'||r[3]==='需补件')?'<div class="remark-detail">补件材料请发送至 4pxotc@4px.com，邮件主题：4px药牌+海外OTC+香港菜鸟4pxOTC仓+XX店铺+X月X日备案申请</div>':'')+'</td></tr>';
   }
   h+='</tbody></table>';el.innerHTML=h;
   var pages=Math.ceil(hits.length/PAGE);
