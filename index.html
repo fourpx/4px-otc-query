@@ -62,7 +62,7 @@ footer{margin-top:24px;text-align:center;font-size:12px;color:#aaa}
 • <b>未备案</b>：尚未完成备案（含被驳回 / 拒绝的记录，备注中显示原因）</div>
 </div>
 <div class="searchbar">
-<input id="q" type="text" placeholder="输入商品条码 / 产品名称，回车或点击查询">
+<textarea id="q" rows="3" placeholder="输入商品条码 / 产品名称，支持一次粘贴多个条码（换行、逗号、空格分隔均可），回车或点击查询"></textarea>
 <button class="btn btn-primary" onclick="doSearch()">查 询</button>
 <button class="btn btn-export btn-always" id="btnExport" onclick="exportExcel()">⬇ 导出Excel</button>
 <button class="btn btn-clear btn-always" id="btnClear" onclick="clearData()">✕ 清除数据</button>
@@ -19523,14 +19523,20 @@ var D=[
 var PAGE=25, cur=0, hits=null;
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
 function tagClass(s){return {'已备案':'tag-ok','审核中':'tag-review','需补件':'tag-wait','未备案':'tag-reject'}[s]||'tag-none'}
+function parseKeys(){
+  var raw=document.getElementById('q').value.toLowerCase();
+  return raw.split(new RegExp("[\\n\\r,\uFF0C;\uFF1B\\t ]+")).map(function(s){return s.trim()}).filter(function(s){return s.length>0});
+}
 function doSearch(){
-  var q=document.getElementById('q').value.trim().toLowerCase();
+  var keys=parseKeys();
   hits=[];
   for(var i=0;i<D.length;i++){
     var r=D[i];
-    if(q){
+    if(keys.length){
       var hay=(r[0]+' '+r[1]).toLowerCase();
-      if(hay.indexOf(q)<0)continue;
+      var ok=false;
+      for(var k=0;k<keys.length;k++){if(hay.indexOf(keys[k])>=0){ok=true;break}}
+      if(!ok)continue;
     }
     hits.push(r);
   }
@@ -19565,8 +19571,7 @@ function clearData(){
   document.getElementById('pager').innerHTML='';
   document.getElementById('stat').textContent='';
   document.getElementById('src').textContent='';
-}
-document.getElementById('q').addEventListener('keydown',function(e){if(e.key==='Enter')doSearch()});
+}document.getElementById('q').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();doSearch()}});
 doSearch();
 </script>
 <script>
